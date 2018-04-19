@@ -41,7 +41,7 @@ DATASETS = {
         IM_DIR:
             _DATA_DIR + '/fashionai_keypoint/train',
         ANN_FN:
-            _DATA_DIR + '/fashionai_keypoint/train/annotations.json'
+            _DATA_DIR + '/fashionai_keypoint/train/Annotations/annotations.json'
     },
     'cityscapes_fine_instanceonly_seg_train': {
         IM_DIR:

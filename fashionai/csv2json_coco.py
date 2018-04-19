@@ -1,7 +1,13 @@
+##############################################################################
+"""Convert the csv of fashionai data to coco format, so that we can easily use
+Detectron to train for keypoints estimation.
+"""
 from pycocotools.coco import COCO
 import json
 import tablib
 import datetime
+from PIL import Image
+import os
 
 def to_coco_keypoints(raw_pts):
     coco_pts = []
@@ -15,36 +21,7 @@ def to_coco_keypoints(raw_pts):
 coco=COCO()
 file_path = "/data/wangli/fashionai_keypoint/train/Annotations/annotations.csv"
 json_path = "/data/wangli/fashionai_keypoint/train/Annotations/annotations.json"
-
-fashion_type = ['blouse','outwear','trousers','skirt','dress']
-categories = dict()
-type_num = 0
-for type in fashion_type:
-    type_num += 1
-    categories[type] = type_num
-
-imported_data = tablib.Dataset().load(open(file_path).read())
-#print(imported_data.export('json'))
-dataset = dict()
-annotations = list()
-images = list()
-image_id = 0
-for data in imported_data:
-    print(data)
-    ann = dict()
-    image_id = image_id + 1
-    ann['image_id'] = categories[data[1]]
-    ann['keypoints'] = to_coco_keypoints(data[2:])
-    ann['iscrowd'] = 0
-    ann['id'] = image_id
-    annotations.append(ann)
-    img = dict()
-    img['id'] = image_id
-    img['file_name'] = data[0]
-    images.append(img)
-
-dataset['annotations'] = annotations
-dataset['images'] = images
+image_path = "/data/wangli/fashionai_keypoint/train"
 
 INFO = {
     "description": "FashionAI keypoints Dataset",
@@ -90,9 +67,43 @@ CATEGORIES = [
         'supercategory': 'cloth',
     },
 ]
-
+dataset = dict()
 dataset['info'] = INFO
 dataset['categories'] = CATEGORIES
 dataset['licenses'] = LICENSES
+
+fashion_type = ['blouse','outwear','trousers','skirt','dress']
+categories = dict()
+type_num = 0
+for type in fashion_type:
+    type_num += 1
+    categories[type] = type_num
+
+imported_data = tablib.Dataset().load(open(file_path).read())
+#print(imported_data.export('json'))
+
+annotations = list()
+images = list()
+image_id = 0
+for data in imported_data:
+    ann = dict()
+    image_id = image_id + 1
+    ann['image_id'] = image_id
+    ann['category_id'] = categories[data[1]]
+    ann['keypoints'] = to_coco_keypoints(data[2:])
+    ann['iscrowd'] = 0
+    ann['id'] = image_id
+    annotations.append(ann)
+    img = dict()
+    img['id'] = image_id
+    img['file_name'] = data[0]
+    filename = os.path.join(image_path, data[0])
+    im = Image.open(filename)
+    img['width'] = im.size[0]
+    img['height'] = im.size[1]
+    images.append(img)
+
+dataset['annotations'] = annotations
+dataset['images'] = images
 
 json.dump(dataset, open(json_path,'w'))
