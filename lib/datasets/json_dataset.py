@@ -288,8 +288,8 @@ class JsonDataset(object):
         self.keypoints_to_id_map = None
         self.num_keypoints = 0
         # Thus far only the 'person' category has keypoints
-        if 'person' in self.category_to_id_map:
-            cat_info = self.COCO.loadCats([self.category_to_id_map['person']])
+        if 'blouse' in self.category_to_id_map:
+            cat_info = self.COCO.loadCats([self.category_to_id_map['blouse']])
         else:
             return
 
