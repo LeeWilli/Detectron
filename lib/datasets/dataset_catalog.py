@@ -37,6 +37,12 @@ RAW_DIR = 'raw_dir'
 
 # Available datasets
 DATASETS = {
+    'keypoints_fashionai_2018_test': {
+        IM_DIR:
+            _DATA_DIR + '/fashionai_keypoint/test',
+        ANN_FN:
+            _DATA_DIR + '/fashionai_keypoint/test/test.json'
+    },
     'keypoints_fashionai_2018_train': {
         IM_DIR:
             _DATA_DIR + '/fashionai_keypoint/train',

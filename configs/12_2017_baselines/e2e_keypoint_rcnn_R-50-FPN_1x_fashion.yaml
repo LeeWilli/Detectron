@@ -4,11 +4,11 @@ MODEL:
   NUM_CLASSES: 6
   FASTER_RCNN: True
   KEYPOINTS_ON: True
-NUM_GPUS: 1
+NUM_GPUS: 2
 SOLVER:
   WEIGHT_DECAY: 0.0001
   LR_POLICY: steps_with_decay
-  BASE_LR: 0.0025
+  BASE_LR: 0.00025
   GAMMA: 0.1
   MAX_ITER: 60000
   STEPS: [0, 30000, 40000]
@@ -43,7 +43,7 @@ TRAIN:
   BATCH_SIZE_PER_IM: 512
   RPN_PRE_NMS_TOP_N: 2000  # Per FPN level
 TEST:
-  DATASETS: ('keypoints_fashionai_2018_train',)
+  DATASETS: ('keypoints_fashionai_2018_test',)
   SCALE: 800
   MAX_SIZE: 1333
   NMS: 0.5
